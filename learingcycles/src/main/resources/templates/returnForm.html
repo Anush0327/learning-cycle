@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<div th:Object="${Cycles}">
+		<p><span th:text="${Cycles.name}">Hero</span> Cycle Returned!</p>
+	<form method="post" action="#" th:action="@{/cycle/return/{id}(id = ${Cycles.id})}">
+		<input type="submit" value="goback" name="action">
+	</form>
+	</div>
+</body>
+</html>

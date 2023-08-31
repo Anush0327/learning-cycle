@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html >
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<table>
+		<tr>
+			<th>id</th>
+			<th>name</th>
+		</tr>
+		<tr th:each="cycle : ${cycleList}">
+			<td th:text="${cycle.id}">1</td>
+			<td th:text="${cycle.name}">neendhya's cycle</td>
+			<td>
+			<form method="post" action="">
+				<input type="submit" name="action" value="take!">
+				<input type="submit" name="action" value="return!">
+				<input type="hidden" name="taken" th:value="${cycle.id}">
+			</form>
+			</td>
+		</tr>
+	</table>
+</body>
+</html>
