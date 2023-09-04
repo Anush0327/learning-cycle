@@ -54,12 +54,15 @@ tr:hover {
 			<td th:text="${cycle.company}"></td>
 			<td th:text="${cycle.count}"></td>
 			<td>
-			<form method="get" action="">
+			<form method="get" th:action="@{/cycle/borrow/{id}(id = ${cycle.id})}">
 				<input type="submit" name="action" value="take!">
+				<!-- <input type="hidden" th:field="name"> -->
 			</form>
-			<form method="get" action="">
+			<!-- <form method="get" th:action="@{/cycle/restock/{id}(id = ${cycle.id})}">
+				<input type="text" value="1" name="number">
 				<input type="submit" name="action" value="restock!">
-			</form>
+				 <input type="hidden" th:field="name">
+			</form> -->
 			</td>
 		</tr>
 	</table>

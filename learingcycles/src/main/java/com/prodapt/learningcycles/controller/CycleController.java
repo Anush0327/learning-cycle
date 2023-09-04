@@ -15,10 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.prodapt.learningcycles.entity.Cycles;
-import com.prodapt.learningcycles.entity.User;
 import com.prodapt.learningcycles.exception.UnsupportedActionException;
 import com.prodapt.learningcycles.repository.CycleRepository;
-import com.prodapt.learningcycles.repository.UserRepository;
 
 @Controller
 @RequestMapping("/cycle")
@@ -27,34 +25,32 @@ public class CycleController {
 	@Autowired
 	private Optional<Cycles> cycle;
 	
-	
-	@Autowired
-	private UserRepository userRepo;
-	
 	@Autowired
 	private CycleRepository cycleRepo;
-
-	@GetMapping("/login")
-	public String loginPage(Model model){
-		List<User> users = new ArrayList<>();
-		userRepo.findAll().forEach(user -> users.add(user));
-		model.addAttribute("Users", users);
-		return "login";
-	}
 	
-	@GetMapping("/list/{name}")
-	public String getFrontPage(Model model,@PathVariable("name") String name){
+	@GetMapping("/list")
+	public String getFrontPage(Model model,String action){
 		List<Cycles> cycleList = new ArrayList<>();
-		var user = userRepo.findByName(name);
-		model.addAttribute("name",user.isCustomer());
 		cycleRepo.findAll().forEach(cycle -> cycleList.add(cycle));
 		model.addAttribute("cycleList", cycleList);
+		if("take!".equals(action)){
+			return "redirect:/cycle/borrow";
+		}
+		else if("restock!".equals(action))
+			return "redirect:/cycle/restock";
 		return "cyclelist";
 	}
 	
+	@GetMapping("/borrow")
+	public String takeCycles(Model model) throws IOException, UnsupportedActionException {
+		List<Cycles> cycleList = new ArrayList<>();
+		cycleRepo.findAll().forEach(cycle -> cycleList.add(cycle));
+		model.addAttribute("cycleList", cycleList);
+		return "borrow";
+	}
 	
 	@GetMapping("/borrow/{id}")
-	public String takeCycle(@PathVariable("id") int id,@RequestParam(name="action") String action) throws IOException, UnsupportedActionException {
+	public String takeCycle(@PathVariable("id") int id,@RequestParam(name="action") String action,Model model) throws IOException, UnsupportedActionException {
 		cycle = cycleRepo.findById(id);
 		if("take!".equals(action)) {
 			int count = cycle.get().getCount();
@@ -66,13 +62,24 @@ public class CycleController {
 				throw new UnsupportedActionException(cycle.get().getCompany()+" Stock Empty");
 			}
 		}
+		List<Cycles> cycleList = new ArrayList<>();
+		cycleRepo.findAll().forEach(cycle -> cycleList.add(cycle));
+		model.addAttribute("cycleList", cycleList);
 		return "redirect:/cycle/list";
 	}
 	
+	@GetMapping("/restock")
+	public String returnCycle(Model model) throws IOException, UnsupportedActionException {
+		List<Cycles> cycleList = new ArrayList<>();
+		cycleRepo.findAll().forEach(cycle -> cycleList.add(cycle));
+		model.addAttribute("cycleList", cycleList);
+		return "restock";
+	}
+
 	@GetMapping("/restock/{id}")
-	public String returnCycle(@PathVariable("id") int id,@RequestParam(name="action") String action,@RequestParam(name="number") String newStock) throws IOException, UnsupportedActionException {
+	public String returnCycle(@PathVariable("id") int id,@RequestParam(name="action") String action,@RequestParam(name="number") String newStock,Model model) throws IOException, UnsupportedActionException {
 		cycle = cycleRepo.findById(id);
-		if("return!".equals(action)) {
+		if("restock!".equals(action)) {
 			int count = cycle.get().getCount();
 			if(count<100){
 				count+=Integer.parseInt(newStock);
@@ -82,6 +89,9 @@ public class CycleController {
 				throw new UnsupportedActionException(cycle.get().getCompany()+" Stock Empty");
 			}
 		}
+		List<Cycles> cycleList = new ArrayList<>();
+		cycleRepo.findAll().forEach(cycle -> cycleList.add(cycle));
+		model.addAttribute("cycleList", cycleList);
 		return "redirect:/cycle/list";
 	}
 }

@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Login</title>
+    <title>Registration</title>
 </head>
 <body>
-    <h2>Login</h2>
-    <form th:action="@{/login}" method="post">
+    <h2>Registration</h2>
+    <form th:action="@{/register}" method="post">
         <div>
             <label for="username">Username:</label>
             <input type="text" id="username" name="username" required>
@@ -14,8 +14,9 @@
             <label for="password">Password:</label>
             <input type="password" id="password" name="password" required>
         </div>
+        <!-- Add more fields as needed -->
         <div>
-            <button type="submit">Login</button>
+            <button type="submit">Register</button>
         </div>
     </form>
 </body>
