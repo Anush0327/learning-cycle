@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html >
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+    <form method="get" th:action="@{/cycle/list/{name}(name=${user.name})}">
+        <select th:each="user: ${Users}">
+            <option th:field="${user.name}"></option>
+        </select>
+    </form>
+</body>
+</html>
